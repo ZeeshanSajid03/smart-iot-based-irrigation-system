@@ -15,7 +15,7 @@ app.use(express.urlencoded({ limit: '5mb', extended: true }));
 const corsOptions = {
     origin: [
         'http://localhost:5173',          // local dev
-        'smartirrigiation-fyp.vercel.app',    // Vercel
+        'https://smartirrigiation-fyp.vercel.app',    // Vercel
         /\.vercel\.app$/                  // any Vercel preview URL
     ],
     credentials: true,
