@@ -10,7 +10,7 @@ import FieldsPage from './pages/FieldsPage';
 import HistoryPage from './pages/HistoryPage';
 import ForgotPassword from './pages/ForgotPassword';
 import DashboardPage from './pages/DashboardPage';
-import VerifyEmail from './components/VerifyEmail';
+import VerifyEmail from './Components/VerifyEmail';
 import SettingsPage from './pages/SettingsPage';
 import SensorsPage from './pages/SensorsPage';
 

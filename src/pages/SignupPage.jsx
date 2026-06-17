@@ -2,8 +2,8 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Import the separate components
-import SignupForm from '../components/SignupForm';
-import AuthImage from '../components/AuthImage';
+import SignupForm from '../Components/SignupForm';
+import AuthImage from '../Components/AuthImage';
 
 const SignupPage = () => {
   return (

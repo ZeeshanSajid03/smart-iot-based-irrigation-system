@@ -2,8 +2,8 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Import the separate components
-import LoginForm from '../components/LoginForm';
-import AuthImage from '../components/AuthImage';
+import LoginForm from '../Components/LoginForm';
+import AuthImage from '../Components/AuthImage';
 
 const LoginPage = () => {
   return (
