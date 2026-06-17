@@ -1,0 +1,278 @@
+/* =========================================
+   GLOBAL STYLES
+   ========================================= */
+
+:root {
+  --primary-green:       #3f6226;
+  --primary-green-hover: #324e1e;
+  --light-green-text:    #55c759;
+  --dashboard-theme:     #58b06d;
+  --card-dark-green:     #3d7b65;
+  --field-dark-green:    #316150;
+  --header-height:       64px;
+  --sidebar-width:       240px;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f8f9fa;
+}
+
+/* =========================================
+   SHARED COMPONENTS
+   ========================================= */
+
+.custom-green-btn {
+  background-color: var(--primary-green) !important;
+  border-color:     var(--primary-green) !important;
+  border-radius:    12px !important;
+  color:            white !important;
+  font-weight:      600 !important;
+}
+.custom-green-btn:hover {
+  background-color: var(--primary-green-hover) !important;
+  border-color:     var(--primary-green-hover) !important;
+}
+
+.custom-green-text { color: var(--light-green-text) !important; }
+.custom-green-text:hover {
+  color: var(--primary-green) !important;
+  text-decoration: underline !important;
+}
+
+.form-control {
+  border-radius: 10px !important;
+  border: 1px solid #e0e0e0 !important;
+  padding: 12px 15px !important;
+}
+.form-control:focus {
+  box-shadow: none !important;
+  border-color: var(--primary-green) !important;
+}
+
+.form-check-input:checked {
+  background-color: var(--primary-green) !important;
+  border-color:     var(--primary-green) !important;
+}
+
+.object-fit-cover { object-fit: cover; }
+
+/* =========================================
+   PROFILE CARD STYLES
+   ========================================= */
+
+.profile-card {
+  background-color: var(--card-dark-green);
+  min-height: 600px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border-radius: 25px !important;
+}
+
+.profile-field-container {
+  background-color: var(--field-dark-green);
+  border-radius: 25px;
+  border: 1px solid rgba(255,255,255,0.1);
+  min-height: 60px;
+}
+
+.profile-field-container .form-control {
+  border-radius: 15px;
+  border: none;
+  color: #333;
+}
+
+.profile-img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border: 4px solid var(--primary-green);
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.clickable-image:hover {
+  opacity: 0.9;
+  border-color: #fff !important;
+  box-shadow: 0 0 15px rgba(255,255,255,0.3);
+}
+
+/* =========================================
+   DASHBOARD LAYOUT — SIDEBAR
+   ========================================= */
+
+.sidebar-panel {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  max-width: var(--sidebar-width);
+  background-color: var(--dashboard-theme);
+  box-shadow: 2px 0 8px rgba(0,0,0,0.08);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-shrink: 0;
+}
+
+/* Mobile: sidebar slides in as overlay */
+@media (max-width: 767px) {
+  .sidebar-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 1200;
+    transform: translateX(-100%);
+  }
+  .sidebar-panel.sidebar-open {
+    transform: translateX(0);
+  }
+}
+
+/* Sidebar overlay backdrop */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1199;
+  animation: fadeIn 0.2s ease;
+}
+.sidebar-backdrop.active { display: block; }
+
+/* =========================================
+   DASHBOARD LAYOUT — HEADER
+   ========================================= */
+
+.dashboard-header {
+  height: var(--header-height);
+  min-height: var(--header-height);
+  max-height: var(--header-height);
+  background-color: var(--dashboard-theme);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  overflow: visible;
+  position: relative;
+  z-index: 100;
+}
+
+/* Hamburger button (mobile only) */
+.sidebar-hamburger {
+  display: none;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.sidebar-hamburger:hover { background: rgba(255,255,255,0.25); }
+
+@media (max-width: 767px) {
+  .sidebar-hamburger { display: flex; }
+  /* On mobile, weather widget takes too much space — hide it */
+  .header-weather-widget { display: none !important; }
+  /* Collapse name text on very small screens */
+  .header-user-name { display: none !important; }
+}
+
+/* =========================================
+   HEADER INNER ELEMENTS
+   ========================================= */
+
+.header-time-text {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.7);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.header-weather-widget {
+  display: flex;
+  align-items: center;
+  background: rgba(0,0,0,0.2);
+  color: #fff;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.header-weather-widget:hover { background: rgba(0,0,0,0.3); }
+
+/* Profile image in header */
+.header-profile-img {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.header-profile-img:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.4);
+}
+
+/* =========================================
+   NAV LINKS (Sidebar)
+   ========================================= */
+
+.nav-link {
+  transition: background 0.18s, color 0.18s, padding-left 0.18s;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.85) !important;
+  padding: 10px 14px !important;
+}
+.nav-link:hover {
+  background-color: rgba(255,255,255,0.12) !important;
+  color: #fff !important;
+  padding-left: 18px !important;
+}
+.nav-link.active-link {
+  background-color: rgba(255,255,255,0.22) !important;
+  font-weight: 700;
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding-left: 18px !important;
+}
+
+/* =========================================
+   UTILITIES
+   ========================================= */
+
+.text-white-50 { color: rgba(255,255,255,0.6) !important; }
+.extra-small   { font-size: 0.7rem; }
+.line-height-1 { line-height: 1.2; }
+
+/* =========================================
+   ANIMATIONS
+   ========================================= */
+
+@keyframes pulse {
+  0%, 100% { opacity: 1;   transform: scale(1);    }
+  50%       { opacity: 0.5; transform: scale(1.15); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0);     }
+}
