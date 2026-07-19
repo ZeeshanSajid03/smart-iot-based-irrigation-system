@@ -1,4 +1,4 @@
-const express = require("express");
+const express  = require("express");
 const mongoose = require("mongoose");
 
 module.exports = function (iotDB) {
@@ -6,18 +6,16 @@ module.exports = function (iotDB) {
 
     const SensorDataSchema = new mongoose.Schema({
         temperature: Number,
-        humidity: Number,
-        soil1: Number,
-        soil2: Number,
-        soilsensor: Boolean,
-        pump: Boolean,
-        createdAt: { type: Date, default: Date.now }
+        humidity:    Number,
+        soil1:       Number,
+        soilsensor:  Boolean,
+        pump:        Boolean,
+        createdAt:   { type: Date, default: Date.now }
     });
 
     const SensorDataModel = iotDB.models["SensorData"]
         || iotDB.model("SensorData", SensorDataSchema);
 
-    // ESP32 posts raw data here — POST /data
     router.post("/", async (req, res) => {
         try {
             const newData = new SensorDataModel(req.body);
@@ -30,7 +28,6 @@ module.exports = function (iotDB) {
         }
     });
 
-    // GET all raw readings — GET /data
     router.get("/", async (req, res) => {
         try {
             const data = await SensorDataModel.find().sort({ createdAt: -1 }).limit(100);

@@ -595,6 +595,24 @@ app.delete('/admin/delete-user/:id', async (req, res) => {
     }
 });
 
+app.delete('/api/notifications/delete/:id', async (req, res) => {
+    try {
+        await NotificationModel.findByIdAndDelete(req.params.id);
+        res.json({ status: "success", message: "Notification deleted." });
+    } catch (err) {
+        res.json({ status: "error", message: err.message });
+    }
+});
+
+app.delete('/api/notifications/clear/:email', async (req, res) => {
+    try {
+        await NotificationModel.deleteMany({ userEmail: req.params.email });
+        res.json({ status: "success", message: "All notifications cleared." });
+    } catch (err) {
+        res.json({ status: "error", message: err.message });
+    }
+});
+
 app.post('/api/admin/notifications/send', async (req, res) => {
     try {
         const { target, header, message, image } = req.body;

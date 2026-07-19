@@ -13,6 +13,7 @@ import DashboardPage from './pages/DashboardPage';
 import VerifyEmail from './Components/VerifyEmail';
 import SettingsPage from './pages/SettingsPage';
 import SensorsPage from './pages/SensorsPage';
+import TeamPage from './pages/TeamPage';
 
 // Admin Pages
 import AdminUsersPage from './pages/AdminUsersPage'; 
@@ -62,6 +63,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/team" element={<TeamPage />} />
         <Route path="/" element={<Navigate to="/login" />} />
 
         {/* --- USER DASHBOARD ROUTES --- */}

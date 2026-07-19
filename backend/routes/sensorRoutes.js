@@ -1,25 +1,23 @@
-const express = require("express");
+const express  = require("express");
 const mongoose = require("mongoose");
 
 module.exports = function (iotDB) {
     const router = express.Router();
 
     const SensorReadingSchema = new mongoose.Schema({
-        userEmail: { type: String, required: true },
+        userEmail:   { type: String, required: true },
         temperature: Number,
-        humidity: Number,
-        soil1: Number,
-        soil2: Number,
-        soilsensor: Boolean,
-        pump: Boolean,
-        createdAt: { type: Date, default: Date.now }
+        humidity:    Number,
+        soil1:       Number,
+        soilsensor:  Boolean,
+        pump:        Boolean,
+        createdAt:   { type: Date, default: Date.now }
     });
 
-    // Prevent model re-registration error on hot reload
     const SensorReadingModel = iotDB.models["sensor_readings"]
         || iotDB.model("sensor_readings", SensorReadingSchema);
 
-    // ESP32 posts here with userEmail in the body
+    // ESP32 posts live data here
     router.post("/", async (req, res) => {
         try {
             const newData = new SensorReadingModel(req.body);
@@ -31,18 +29,23 @@ module.exports = function (iotDB) {
         }
     });
 
-    // GET /api/sensor-data/admin-stats — readings per day for last 7 days (admin chart)
+    // Admin chart — readings per day for last 7 days
     router.get("/admin-stats", async (req, res) => {
         try {
             const days = [];
             for (let i = 6; i >= 0; i--) {
-                const d = new Date();
+                const d       = new Date();
                 d.setDate(d.getDate() - i);
                 const dateStr = d.toISOString().split('T')[0];
-                const start = new Date(dateStr + 'T00:00:00.000Z');
-                const end = new Date(dateStr + 'T23:59:59.999Z');
-                const count = await SensorReadingModel.countDocuments({ createdAt: { $gte: start, $lte: end } });
-                days.push({ day: d.toLocaleDateString('en-US', { weekday: 'short' }), readings: count });
+                const start   = new Date(dateStr + 'T00:00:00.000Z');
+                const end     = new Date(dateStr + 'T23:59:59.999Z');
+                const count   = await SensorReadingModel.countDocuments({
+                    createdAt: { $gte: start, $lte: end }
+                });
+                days.push({
+                    day:      d.toLocaleDateString('en-US', { weekday: 'short' }),
+                    readings: count
+                });
             }
             res.json({ status: 'success', data: days });
         } catch (err) {
@@ -50,7 +53,7 @@ module.exports = function (iotDB) {
         }
     });
 
-    // DELETE /api/sensor-data/clear?email=x
+    // Clear all readings for a user
     router.delete("/clear", async (req, res) => {
         const { email } = req.query;
         if (!email) return res.status(400).json({ error: "Provide ?email= in query" });
@@ -62,9 +65,7 @@ module.exports = function (iotDB) {
         }
     });
 
-
-
-    // Dashboard fetches latest readings by user email
+    // Dashboard fetches by email
     router.get("/:email", async (req, res) => {
         try {
             const data = await SensorReadingModel
@@ -77,18 +78,17 @@ module.exports = function (iotDB) {
         }
     });
 
-
+    // Test seed
     router.post("/seed", async (req, res) => {
         const { email } = req.query;
         if (!email) return res.status(400).json({ error: "Provide ?email=yourEmail in query string" });
         try {
             const fake = new SensorReadingModel({
-                userEmail: email,
+                userEmail:   email,
                 temperature: parseFloat((22 + Math.random() * 10).toFixed(1)),
-                humidity: parseFloat((45 + Math.random() * 30).toFixed(1)),
-                soil1: Math.floor(Math.random() * 100) + 1,
-                soil2: Math.floor(Math.random() * 100) + 1,
-                soilsensor: Math.random() > 0.5,
+                humidity:    parseFloat((45 + Math.random() * 30).toFixed(1)),
+                soil1:       Math.floor(Math.random() * 100) + 1,
+                soilsensor:  true,
                 pump: Math.random() > 0.7,
             });
             await fake.save();
@@ -99,6 +99,37 @@ module.exports = function (iotDB) {
         }
     });
 
+    // Bulk seed
+    router.post("/seed-bulk", async (req, res) => {
+        const { email }  = req.query;
+        if (!email) return res.status(400).json({ error: "Provide ?email= in query" });
+        const count    = req.body.count    || 50;
+        const daysBack = req.body.daysBack || 6;
+        try {
+            const docs = [];
+            for (let i = 0; i < count; i++) {
+                const randomDayOffset = Math.floor(Math.random() * (daysBack + 1));
+                const randomDate      = new Date();
+                randomDate.setDate(randomDate.getDate() - randomDayOffset);
+                randomDate.setHours(Math.floor(Math.random() * 24));
+                randomDate.setMinutes(Math.floor(Math.random() * 60));
+                docs.push({
+                    userEmail:   email,
+                    temperature: parseFloat((22 + Math.random() * 10).toFixed(1)),
+                    humidity:    parseFloat((45 + Math.random() * 30).toFixed(1)),
+                    soil1:       parseFloat((1 + Math.random() * 99).toFixed(1)),
+                    soilsensor:  true,
+                    pump:        true,
+                    createdAt:   randomDate,
+                });
+            }
+            await SensorReadingModel.insertMany(docs);
+            res.json({ status: "success", message: `Inserted ${count} readings`, count });
+        } catch (error) {
+            console.error("Bulk seed error:", error);
+            res.status(500).json({ error: "Bulk seed failed" });
+        }
+    });
+
     return router;
 };
-
