@@ -419,6 +419,30 @@ app.post('/api/update-alerts', async (req, res) => {
     }
 });
 
+// POST /api/sensor-data/inject — post exact values for demo purposes
+app.post('/api/sensor-data/inject', async (req, res) => {
+    try {
+        const { email, temperature, humidity, soil1, pump } = req.body;
+        if (!email) return res.status(400).json({ error: "Provide email in body" });
+
+        // Get the SensorReading model from iotDB
+        const SensorReading = iotDB.models["sensor_readings"];
+        const reading = new SensorReading({
+            userEmail:   email,
+            temperature: temperature ?? 32,
+            humidity:    humidity    ?? 60,
+            soil1:       soil1       ?? 15,
+            soilsensor:  true,
+            pump:        pump        ?? false,
+            createdAt:   new Date(),
+        });
+        await reading.save();
+        res.status(201).json({ status: "success", message: "Reading injected.", data: reading });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // GET /api/user-settings/:email — fetch user's custom thresholds and flow rate
 app.get('/api/user-settings/:email', async (req, res) => {
     try {
