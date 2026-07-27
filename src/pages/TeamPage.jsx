@@ -23,7 +23,7 @@ const TEAM_MEMBERS = [
     },
     {
         name: 'Hayan Sajid',
-        role: 'Frontnend Developer',
+        role: 'Frontend Developer',
         linkedin: 'https://linkedin.com/in/hayan-sajid-a60745355',
         github: 'https://github.com/Hayansajid',
         avatar: 'HS',
