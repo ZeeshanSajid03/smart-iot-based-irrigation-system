@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
-// ── CHANGE THESE ─────────────────────────────────────────────────────────────
+// ── CHANGE THESE ───────────────────────────────────────────────────────────
 const SECRET_TOKEN = 'fyp2025cust';
 
 const TEAM_MEMBERS = [
