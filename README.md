@@ -659,7 +659,7 @@ Resume before use. Vercel frontend remains live at no cost regardless.
       <a href="https://linkedin.com/in/tallal-mahmood">LinkedIn</a>
     </td>
     <td align="center">
-      <b>Haysan Sajid</b><br/>
+      <b>Hayan Sajid</b><br/>
       <sub>Frontend Developer</sub><br/>
       <a href="https://github.com/Hayansajid">GitHub</a> ·
       <a href="https://linkedin.com/in/hayan-sajid-a60745355">LinkedIn</a>
